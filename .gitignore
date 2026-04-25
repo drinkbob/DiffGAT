@@ -1,0 +1,62 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Model checkpoints and heavy binary artifacts
+*.pth
+*.pt
+*.ckpt
+*.pkl
+*.joblib
+*.sdf
+
+# Generated molecule outputs
+generated_molecules_*.csv
+generated_molecules_*.sdf
+multi_core_generated_*.csv
+multi_core_test_*.csv
+multi_core_seedtest_*.csv
+
+# Repro reports and summaries
+repro_check_report.json
+results_baseline_summary.csv
+results_baseline_summary_plus.csv
+core_retention_*.csv
+
+# Result directories and figures
+ablation_results_*/
+demo_ablation_results_*/
+optimized_ablation_results_*/
+optimized_demo_ablation_results_*/
+hybrid_ablation_results_*/
+figures/
+sci_paper_figures/

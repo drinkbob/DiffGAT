@@ -1,0 +1,348 @@
+#  - 
+
+##  Functions
+
+:
+
+### 1. 
+- **Functions**: (EGFR、BCR-ABL、ALK)
+- ****: ADMET
+- ****: 
+
+### 2. 
+- **Functions**: ,
+- ****: ,
+- ****: 
+
+##  
+
+### A. -
+
+#### :
+```csv
+compound_id,smiles,target,ic50_nm,ki_nm,activity_type,assay_type,publication
+CHEMBL123,CCc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nccc(-c2cccnc2)n1,EGFR,33,25,IC50,biochemical,PMID12345678
+```
+
+#### :
+- **smiles**: SMILES
+- **target**: (,EGFR、BCR-ABL)
+- **ic50_nm/ki_nm**: ()
+- **activity_type**: (IC50、Ki、Kd)
+- **assay_type**: (biochemical、cellular、in_vivo)
+
+#### :
+1. **ChEMBL** (https://www.ebi.ac.uk/chembl/)
+   - validation
+   - 
+
+2. **PubChem BioAssay** (https://pubchem.ncbi.nlm.nih.gov/bioassay/)
+   - 
+   - 
+
+3. **BindingDB** (https://www.bindingdb.org/)
+   - -
+   - 
+
+### B. ADMETtrain
+
+#### :
+```csv
+smiles,solubility_logS,permeability_logPapp,cyp3a4_inhibition,herg_inhibition,hepatotoxicity,bbb_penetration
+CCc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1,-3.2,4.5,0,1,0,1
+```
+
+#### :
+- **** (Solubility): 
+- **** (Permeability): 
+- **CYP**: P450
+- **hERG**: 
+- ****: 
+- ****: 
+
+#### :
+1. **ADMETlab** - ADMET
+2. **hERG Central** - 
+3. **DILI** - 
+
+### C. 
+
+#### :
+```json
+{
+  "drug_name": "imatinib",
+  "smiles": "Cc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nccc(-c2cccnc2)n1",
+  "approved_indications": ["CML", "GIST", "ALL"],
+  "known_targets": ["BCR-ABL", "c-KIT", "PDGFR-α", "PDGFR-β"],
+  "mechanism_of_action": "tyrosine kinase inhibitor",
+  "side_effects": ["nausea", "muscle_cramps", "diarrhea"],
+  "contraindications": ["pregnancy", "severe_hepatic_impairment"],
+  "phase": "marketed"
+}
+```
+
+#### :
+1. **DrugBank** - 
+2. **SIDER** - 
+3. **TTD (Therapeutic Target Database)** - 
+
+##  
+
+### 1. train
+
+#### A. 
+```python
+# train
+def enhanced_target_training():
+    # 
+    datasets = [
+        load_chembl_data(target='EGFR'),
+        load_pubchem_bioassay_data(target='EGFR'),
+        load_bindingdb_data(target='EGFR')
+    ]
+
+    # 
+    clean_data = standardize_activity_data(datasets)
+
+    # 
+    from sklearn.ensemble import GradientBoostingRegressor
+    model = GradientBoostingRegressor(
+        n_estimators=500,
+        learning_rate=0.1,
+        max_depth=6
+    )
+
+    return model
+```
+
+#### B. 
+```python
+# 
+def enhanced_molecular_features(smiles):
+    mol = Chem.MolFromSmiles(smiles)
+
+    features = []
+
+    # 1. 
+    features.extend(get_rdkit_descriptors(mol))
+
+    # 2. 
+    # Morgan
+    morgan_fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
+    features.extend(list(morgan_fp))
+
+    # MACCS
+    maccs_fp = AllChem.GetMACCSKeysAsBitVect(mol)
+    features.extend(list(maccs_fp))
+
+    # 3. 3D(3D)
+    if mol.GetNumConformers() > 0:
+        features.extend(get_3d_descriptors(mol))
+
+    # 4. 
+    features.extend(get_pharmacophore_features(mol))
+
+    return np.array(features)
+```
+
+### 2. 
+
+#### A. Target
+```python
+def multi_objective_generation():
+    objectives = {
+        'target_affinity': lambda mol: -np.log10(predict_ic50(mol)),  # IC50
+        'admet_score': lambda mol: predict_admet_score(mol),          # ADMET
+        'synthetic_accessibility': lambda mol: -predict_sa_score(mol), # 
+        'novelty': lambda mol: calculate_novelty_score(mol)           # 
+    }
+
+    # 
+    from pymoo.algorithms.moo.nsga2 import NSGA2
+
+    # Target
+    pass
+```
+
+#### B. 
+```python
+def constraint_guided_generation():
+    constraints = {
+        'core_preservation': lambda mol: has_benzimidazole_core(mol),
+        'drug_likeness': lambda mol: check_lipinski_rules(mol),
+        'target_activity': lambda mol: predict_ic50(mol) < 1.0,  # IC50 < 1μM
+        'safety_profile': lambda mol: predict_toxicity_risk(mol) < 0.3
+    }
+
+    # 
+    pass
+```
+
+##  
+
+### 1. 
+- ****: 
+- ****: 
+- ****: 
+
+### 2. 
+- ****: R²、RMSE、
+- **ADMET**: AUC、、
+- ****: 、
+
+### 3. 
+- ****: 
+- ****: SA_Score
+- ****: QED
+
+##  validation
+
+### 1. validation
+```python
+def computational_validation():
+    # 1. validation
+    dock_score = molecular_docking(mol, target_protein)
+
+    # 2. 
+    md_stability = run_md_simulation(mol, target_complex)
+
+    # 3. 
+    binding_energy = quantum_calculation(mol, target)
+
+    # 4. 
+    pharmacophore_fit = check_pharmacophore_match(mol, target_pharmacophore)
+
+    return {
+        'dock_score': dock_score,
+        'md_stability': md_stability,
+        'binding_energy': binding_energy,
+        'pharmacophore_fit': pharmacophore_fit
+    }
+```
+
+### 2. validation
+1. ****
+   - IC50
+   - 
+   - 
+
+2. **validation**
+   - 
+   - 
+   - 
+
+3. **ADMET**
+   - 
+   - 
+   - 
+
+##  
+
+### 
+```python
+def automated_data_collection():
+    """train"""
+
+    # 1. ChEMBL
+    chembl_data = fetch_chembl_data(
+        targets=['EGFR', 'BCR-ABL', 'ALK', 'ROS1'],
+        activity_types=['IC50', 'Ki'],
+        min_activity_count=10
+    )
+
+    # 2. PubChem  
+    pubchem_data = fetch_pubchem_bioassay_data(
+        target_keywords=['EGFR', 'epidermal growth factor receptor'],
+        assay_types=['biochemical', 'cell-based']
+    )
+
+    # 3. 
+    literature_data = mine_literature_data(
+        pubmed_queries=['EGFR inhibitor IC50', 'benzimidazole anticancer'],
+        max_papers=1000
+    )
+
+    # 4. 
+    integrated_data = integrate_and_clean_data([
+        chembl_data, pubchem_data, literature_data
+    ])
+
+    return integrated_data
+```
+
+##  
+
+### 1: EGFR
+**Target**: EGFR
+****: 
+- EGFR (>5000)
+- 
+- 
+
+****:
+- IC50 < 100 nM > 10%
+- EGFR > 10:1
+-  > 0.6
+
+### 2: 
+**Target**: 
+****:
+- 
+- 
+- 
+
+****:
+- 3
+-  > 0.7
+- 
+
+##  
+
+### 
+```bash
+# 
+pip install rdkit-pypi torch scikit-learn pandas numpy
+pip install pymoo  # Target
+pip install pubchempy  # PubChem API
+pip install chembl_webresource_client  # ChEMBL API
+```
+
+### 
+```python
+# 1. 
+from drug_oriented_generation import EnhancedMolecularGenerator
+
+generator = EnhancedMolecularGenerator()
+generator.set_target("EGFR")
+molecules = generator.generate_target_oriented_molecules(num_molecules=100)
+
+# 2. 
+molecules = generator.generate_target_oriented_molecules(
+    num_molecules=50,
+    target_ic50_threshold=0.1,  # 
+    admet_threshold=0.7         # ADMET
+)
+
+# 3. 
+analysis = generator.analyze_generated_molecules(molecules)
+generator.save_results(molecules)
+```
+
+##  
+
+### 1. 
+- Transformer
+- 
+- 
+
+### 2. 
+- 
+- 
+- 
+
+### 3. validation
+- validation
+- 
+- 
+
+,,,. 
