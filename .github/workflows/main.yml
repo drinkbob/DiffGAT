@@ -43,10 +43,10 @@ jobs:
             --collect-all torch `
             --collect-all torch_geometric `
             --collect-all sklearn `
+            --collect-all numpy `
             --hidden-import sklearn.neighbors._partition_nodes `
             --hidden-import sklearn.utils._typedefs `
-            --hidden-import rdkit.RDPaths `
-            --hidden-import rdkit.RDLogger `
+            --hidden-import numpy.core._multiarray_umath `
             launcher.py
 
       - name: 上传产物
