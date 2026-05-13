@@ -8,7 +8,7 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 
 # ========== 1.  ==========
-from improved_hybrid_molecular_generator10 import ImprovedHybridMolecularGenerator
+from improved_hybrid_molecular_generator import ImprovedHybridMolecularGenerator
 model = ImprovedHybridMolecularGenerator(...)
 generated_smiles = model.generate(num_samples=1000)  # SMILES
 
