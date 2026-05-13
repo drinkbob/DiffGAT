@@ -42,12 +42,12 @@ plt.rcParams['ytick.major.width'] = 1.2
 
 # 
 try:
-    from improved_hybrid_molecular_generator10 import ImprovedHybridMolecularGenerator, ImprovedHybridConfig
+    from improved_hybrid_molecular_generator import ImprovedHybridMolecularGenerator, ImprovedHybridConfig
 
     print(" ")
 except ImportError as e:
     print(f" : {e}")
-    print(" improved_hybrid_molecular_generator10.py ")
+    print(" improved_hybrid_molecular_generator.py ")
     sys.exit(1)
 
 class MolecularEvaluator:
