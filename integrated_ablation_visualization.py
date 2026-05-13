@@ -49,7 +49,7 @@ plt.rcParams.update({
 })
 
 # 
-from improved_hybrid_molecular_generator10 import ImprovedHybridMolecularGenerator, ImprovedHybridConfig
+from improved_hybrid_molecular_generator import ImprovedHybridMolecularGenerator, ImprovedHybridConfig
 
 class IntegratedAblationVisualizer:
     """"""
